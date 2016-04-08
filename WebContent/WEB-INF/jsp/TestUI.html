@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Test UI Semantics</title>
+		<link rel="stylesheet" type="text/css" href="../css/dist/semantic.min.css">
+		<script type="text/javascript" src="../js/jquery-1.12.3.min.js"></script>
+		<script type="text/javascript" src="../css/dist/semantic.min.js"></script>
+	</head>
+	<body>
+		<div class="ui segment">
+			<div class="ui fluid form">
+				<div class="two fields">
+					<div class="field">
+						<label>First Name</label>
+						<input type="text" placeholder="First Name" />
+					</div>
+					<div class="field">
+						<label>Last Name</label>
+						<input type="text" placeholder="Last Name" />
+					</div>
+				</div>
+				<div class="ui accordion field">
+					<div class="title">
+						<i class="icon dropdown"></i>
+						Optional Fields
+					</div>
+					<div class="content field">
+						<label class="transition hidden">Middle Name</label>
+						<input type="text" placeholder="Middle Name" class="transition hidden" />
+					</div>
+				</div>
+				<div class="ui secondary submit button">Sign Up</div>
+			</div>
+		</div>
+		<br/><hr/><br/>
+		<div class="ui checkbox">
+			<input type="checkbox" name="example" />
+			<label>Make my profile visible</label>
+		</div>
+		<br/><hr/><br/>
+		<div class="ui form">
+			<div class="inline fields">
+				<label>How often to use checkboxes?</label>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="frequency" checked="checked" />
+						<label>Once a week</label>
+					</div>
+				</div>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="frequency" />
+						<label>2-3 times a week</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br/><hr/><br/>
+		<div class="ui form">
+			<div class="grouped fields">
+				<label>How often to use checkboxes?</label>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="example" checked="checked" />
+						<label>Once a week</label>
+					</div>
+				</div>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="example" />
+						<label>2-3 times a week</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br/><hr/><br/>
+		<div class="ui read-only checkbox">
+			<input type="checkbox" />
+			<label>Read Only</label>
+		</div>
+		<br/><hr/><br/>
+		<select class="ui dropdown">
+			<option value="">Gender</option>
+			<option value="1">Male</option>
+			<option value="0">Female</option>
+		</select>
+		<br/><hr/><br/>
+		<select name="skills" multiple="" class="ui fluid dropdown">
+			<option value="">Skills</option>
+			<option value="angular">Angular</option>
+			<option value="css">CSS</option>
+			<option value="design">Graphic Design</option>
+			<option value="ember">Ember</option>
+			<option value="html">HTML</option>
+			<option value="ia">Information Architecture</option>
+			<option value="javascript">Javascript</option>
+			<option value="mech">Mechanical Engineering</option>
+			<option value="meteor">Meteor</option>
+			<option value="node">NodeJS</option>
+			<option value="plumbing">Plumbing</option>
+			<option value="python">Python</option>
+			<option value="rails">Rails</option>
+			<option value="react">React</option>
+			<option value="repair">Kitchen Repair</option>
+			<option value="ruby">Ruby</option>
+			<option value="ui">UI Design</option>
+			<option value="ux">User Experience</option>
+		</select>
+		<br/><hr/><br/>
+		<script type="text/javascript">
+			$('.ui.accordion').accordion();
+			$('.ui.dropdown').dropdown();
+		</script>
+	</body>
+</html>
