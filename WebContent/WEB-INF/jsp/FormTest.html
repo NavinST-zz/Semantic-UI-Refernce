@@ -35,7 +35,7 @@
 			<div class="two fields">
 				<div class="field">
 					<label>State</label>
-					<select class="ui fluid dropdown">
+					<select class="ui fluid dropdown" name="statedropdown">
 						<option value="">State</option>
 					    <option value="AL">Alabama</option>
 					    <option value="AK">Alaska</option>
@@ -434,6 +434,29 @@
 			$('select.dropdown').dropdown();
 			$('.ui.dropdown').dropdown();
 			$('.ui.checkbox').checkbox();
+			$('.ui.form').form({
+				on: 'blur',
+				fields: {
+					empty: {
+						identifier: 'shipping[first-name]',
+						rules: [
+							{
+								type: 'empty',
+								prompt: 'Please enter First Name'
+							}        
+						]
+					},
+					dropdown: {
+						identifier: 'statedropdown',
+						rules: [
+							{
+								type: 'empty',
+								prompt: 'Please select a State from dropdown'
+							}        
+						]
+					}
+				}
+			});
 		</script>
 	</body>
 </html>
