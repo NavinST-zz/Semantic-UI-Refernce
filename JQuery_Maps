@@ -1,0 +1,417 @@
+Skip to content
+Enterprise
+This repository
+Search
+Pull requests
+Issues
+Gist
+ @a542889
+ Unwatch 92
+  Star 0
+ Fork 6 inventory/stg-ui
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Pulse  Graphs
+Branch: master Find file Copy pathstg-ui/stg-ui-app/src/main/webapp/js/mpdDisplayList.js
+b3ba079  on Mar 15, 2016
+@A568471 A568471 Added return false
+1 contributor
+RawBlameHistory     
+400 lines (366 sloc)  9.51 KB
+/**
+ * 
+ */
+
+var mpdTable;
+
+$(document).ready(function() {
+	mpdTable = $('#mpdTable').DataTable({
+		"paging": false,
+		"ordering": false,
+		"info": false,
+		"bFilter": false,
+		scrollY: "100px",
+		"columns": [
+		            {"width": "10%"},
+		            {"width": "15%"},
+		            {"width": "35%"},
+		            {"width": "20%"},
+		            {"width": "10%"},
+		            {"width": "10%"},
+		            {"width": "0%"},
+		            {"width": "0%"},
+		            {"width": "0%"},
+		            {"width": "0%"},
+		            {"width": "0%"}
+		           ],
+		 "language": {
+			 "emptyTable" : "No MPD List found"
+		 }
+	});
+	
+	toggleSearch();
+	
+	if(document.getElementById("fromPage").value == "stg001014" || document.getElementById("fromPage").value == "stg014")
+	{
+		$('#mpdTable tbody').on('click', 'tr', function() {
+			
+			if($(this).hasClass("selected"))
+			{
+				$(this).removeClass("selected");
+			}
+			else
+			{
+				$(this).addClass("selected");
+			}
+			if(mpdTable.rows('.selected').data().length == 0)
+			{
+				$('#crteMscBtn').attr('disabled','disabled');
+			}
+			else
+			{
+				$('#crteMscBtn').removeAttr('disabled');
+			}
+			if(mpdTable.rows('.selected').data().length == 1 && document.getElementById("fromStgPage").value == "N")
+			{
+				$('#mpdSubListBtn').removeAttr('disabled');
+			}
+			else
+			{
+				$('#mpdSubListBtn').attr('disabled','disabled');
+			}
+			validateAccess();
+		});
+	}
+	else if(document.getElementById("fromPage").value == "stg001")
+	{
+		$('#mpdTable tbody').on('click', 'tr', function() {
+			
+			if($(this).hasClass("selected"))
+			{
+				$(this).removeClass("selected");
+				$('#mpdSubListBtn').attr('disabled','disabled');
+				$('#modDelTieBtn').attr('disabled','disabled');
+			}
+			else
+			{
+				$('tr.selected').removeClass('selected');
+				$(this).addClass("selected");
+				
+				var selMscs = $.map(mpdTable.rows('.selected').data(), function(item) {
+					return item[5];
+				});
+				if(document.getElementById("fromStgPage").value == "N")
+				{
+					$('#mpdSubListBtn').removeAttr('disabled');
+				}
+				else
+				{
+					$('#mpdSubListBtn').attr('disabled','disabled');
+				}
+				if(selMscs == null || selMscs == "")
+				{
+					$('#modDelTieBtn').attr('disabled','disabled');
+				}
+				else
+				{
+					if(document.getElementById("hdeptId").value == document.getElementById("mpdDeptId").value)
+					{
+						$('#modDelTieBtn').removeAttr('disabled');
+					}
+					else
+					{
+						$('#modDelTieBtn').attr('disabled','disabled');
+					}
+				}
+			}
+			validateAccess();
+		});
+	}
+	else if(document.getElementById("fromPage").value == "stg010")
+	{
+		$('#mpdTable tbody').on('click', 'tr', function() {
+			
+			if($(this).hasClass("selected"))
+			{
+				$(this).removeClass("selected");
+				$('#mpdSubListBtn').attr('disabled','disabled');
+				$('#crteTieBtn').attr('disabled','disabled');
+			}
+			else
+			{
+				$('tr.selected').removeClass('selected');
+				$(this).addClass("selected");
+				
+				var selMscs = $.map(mpdTable.rows('.selected').data(), function(item) {
+					return item[5];
+				});
+				
+				if(document.getElementById("hdeptId").value == document.getElementById("mpdDeptId").value)
+				{
+					if(document.getElementById("fromStgPage").value == "N")
+					{
+						$('#mpdSubListBtn').removeAttr('disabled');
+					}
+					else
+					{
+						$('#mpdSubListBtn').attr('disabled','disabled');
+					}
+					if(selMscs == "" || selMscs == null)
+					{
+						$('#crteTieBtn').removeAttr('disabled');
+					}
+					else
+					{
+						$('#crteTieBtn').attr('disabled','disabled');
+					}
+				}
+				else
+				{
+					if(document.getElementById("fromStgPage").value == "N")
+					{
+						$('#mpdSubListBtn').removeAttr('disabled');
+					}
+					else
+					{
+						$('#mpdSubListBtn').attr('disabled','disabled');
+					}
+					$('#crteTieBtn').attr('disabled','disabled');
+				}
+			}
+			validateAccess();
+		});
+	}
+});
+
+function toggleSearch()
+{
+	if(document.getElementById("displayNum").checked)
+	{
+		$('#searchValue').removeAttr('disabled');
+		$('#dispMonth').val("00");
+		$('#dispDate').val("00");
+		$('#dispYear').val("0000");
+		$('#dispMonth').attr('disabled','disabled');
+		$('#dispDate').attr('disabled','disabled');
+		$('#dispYear').attr('disabled','disabled');
+		$('#searchValue').focus();
+	}
+	else
+	{
+		$('#searchValue').val("");
+		$('#searchValue').attr('disabled','disabled');
+		$('#dispMonth').removeAttr('disabled');
+		$('#dispDate').removeAttr('disabled');
+		$('#dispYear').removeAttr('disabled');
+		$('#dispMonth').select();
+		$('#dispMonth').focus();
+	}
+}
+
+function enterNumeric(obj) 
+{
+	if ((event.keyCode < 48) || (event.keyCode > 57)) 
+	{
+		if (event.keyCode != 13) 
+		{
+			event.returnValue = false; // IE8
+			event.preventDefault();// IE11
+		}
+	}
+}
+
+function appendZero(id)
+{
+	if(document.getElementById(id).id == "dispYear")
+	{
+		if(document.getElementById(id).value.trim().length == 0)
+		{
+			document.getElementById(id).value = "0000";
+		}
+		else if(document.getElementById(id).value.trim().length == 1)
+		{
+			document.getElementById(id).value = "000" + document.getElementById(id).value;
+		}
+		else if(document.getElementById(id).value.trim().length == 2)
+		{
+			document.getElementById(id).value = "00" + document.getElementById(id).value;
+		}
+		else if(document.getElementById(id).value.trim().length == 3)
+		{
+			document.getElementById(id).value = "0" + document.getElementById(id).value;
+		}
+	}
+	else
+	{
+		if(document.getElementById(id).value.trim().length == 0)
+		{
+			document.getElementById(id).value = "00";
+		}
+		else if(document.getElementById(id).value.trim().length == 1)
+		{
+			document.getElementById(id).value = "0" + document.getElementById(id).value;
+		}
+	}
+}
+
+function mpdSearch()
+{
+	$('#currentPage').val("1");
+	$('#paginationFlag').val("N");
+	document.mpdPageDisplay.action = "mpdDisplaySearch.do";
+	document.mpdPageDisplay.submit();
+	return false;
+}
+
+function toggleFocus(arg,flag)
+{
+	if(flag == "dispNumber")
+	{
+		if(arg.length == 7)
+		{
+			$('#searchBtn').focus();
+		}
+	}
+	if(flag == "dispYear")
+	{
+		if(arg.length == 4)
+		{
+			$('#searchBtn').focus();
+		}
+	}
+	if(flag == "dispMonth")
+	{
+		if(arg.length == 2)
+		{
+			$('#dispDate').val("");
+			$('#dispDate').select();
+			$('#dispDate').focus();
+		}
+	}
+	if(flag == "dispDate")
+	{
+		if(arg.length == 2)
+		{
+			$('#dispYear').val("");
+			$('#dispYear').select();
+			$('#dispYear').focus();
+		}
+	}
+}
+
+function focusFields() {
+
+	var focusField = document.getElementById("focusField").value;
+
+	if (focusField != null && focusField.trim().length > 0) {
+		document.getElementById(focusField).select();
+		document.getElementById(focusField).focus();
+
+	}
+
+}
+
+function handleClose()
+{
+	document.mpdPageDisplay.action = "mpdDisplayCloseRedirect.do";
+	document.mpdPageDisplay.submit();
+	return false;
+}
+
+function handleCreateMsc()
+{
+	var i=0;
+	mpdTable.$('tr.selected').each(
+			function(){
+				rowData=mpdTable.row($(this)).data();
+				addHiddenToForm($("#mpdPageDisplay"), 'mpdList['+i+'].dispNumber', rowData[0].trim());
+				addHiddenToForm($("#mpdPageDisplay"), 'mpdList['+i+'].dispXhit', rowData[1].trim());	
+				addHiddenToForm($("#mpdPageDisplay"), 'mpdList['+i+'].dispDesc', rowData[2].trim());	
+				addHiddenToForm($("#mpdPageDisplay"), 'mpdList['+i+'].dispSubGrp', rowData[3].trim());	
+				addHiddenToForm($("#mpdPageDisplay"), 'mpdList['+i+'].dispSetDate', rowData[4].trim());	
+				addHiddenToForm($("#mpdPageDisplay"), 'mpdList['+i+'].dispMsc', rowData[5].trim());	
+				i++;
+				
+			}
+	);
+	document.mpdPageDisplay.action = "mpdDisplayCreateMsc.do";
+	document.mpdPageDisplay.submit();
+	return false;
+}
+
+function getResults()
+{
+	$('#paginationFlag').val("Y");
+	document.mpdPageDisplay.action = "mpdDisplayLoad.do";
+	document.mpdPageDisplay.submit();
+}
+
+function createMpdTie() {
+	var purge  = document.getElementById("purgeDate").value;
+	$('#purgeDate').val(purge);
+	$('#createFlag').val("true");
+	$('#page').val("stg036");
+	var display = $.map(mpdTable.rows('.selected').data(), function(item) {
+		return item[0];
+	});
+	$('#mpdDisplay').val(display);
+	document.mpdPageDisplay.action = "createTie.do";
+	document.mpdPageDisplay.submit();
+	return false;
+}
+
+function modifyMpdTie() {
+	var selMscs = $.map(mpdTable.rows('.selected').data(), function(item) {
+		return item[10];
+	});
+	
+	$('#selMsc').val(selMscs);
+	$('#createFlag').val("false");
+	$('#page').val("stg036");
+	document.mpdPageDisplay.action = "createTie.do";
+	document.mpdPageDisplay.submit();
+	return false;
+}
+
+	function checkDateNumeric(arg,flag)
+{
+	if(isNaN(arg))
+	{
+		alert("Date entered should be numeric");
+		document.getElementById(flag).focus();
+		return false;
+	}
+	return true;
+}
+
+function handleSubGrpList()
+{
+	var selMpd = [];
+	
+	selMpd = $.map(mpdTable.rows('.selected').data(), function(item) {
+		return item;
+	});
+	$('#selMpd').val(selMpd);
+	document.mpdPageDisplay.action = "mpdSubGrouplistRedirect.do";
+	document.mpdPageDisplay.submit();
+	return false;
+}
+
+function dispNumberSelect()
+{
+	document.getElementById("displayNum").checked = true;
+}
+
+function dispSetDateSelect()
+{
+	document.getElementById("displayDate").checked = true;
+}
+
+function validateAccess()
+{
+	$('#sec_cur_dept').val($('#hdeptId').val().trim());
+	if(!hasUpdateAccess() || $('#buttonDisabled').val() == 'true')
+	{
+		$('#crteMscBtn').attr('disabled','disabled');
+		$('#crteTieBtn').attr('disabled','disabled');
+		$('#modDelTieBtn').attr('disabled','disabled');
+	}
+}
