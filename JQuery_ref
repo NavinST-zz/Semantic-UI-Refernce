@@ -1,0 +1,97 @@
+var strGrpresults;
+
+strGrpresults = $('#strGrpresults').DataTable({
+		"paging" : false,
+		"ordering" : false,
+		"info" : false,
+		"bFilter" : false,
+		scrollY : "250px",
+		"columns" : [ {
+			"width" : "5%"
+		}, {
+			"width" : "10%"
+		}, {
+			"width" : "5%"
+		}, {
+			"width" : "36%"
+		}, {
+			"width" : "24%"
+		}, {
+			"width" : "5%"
+		}, {
+			"width" : "5%"
+		}, {
+			"width" : "5%"
+		}, {
+			"width" : "5%"
+		} ],
+		"language" : {
+			"emptyTable" : "No Group List found"
+		}
+	});
+});
+
+$(function() {
+	$('input[type=checkbox]').click(function() {
+		if (document.getElementById("listBoxdept").value != ""
+			&& (document.getElementById("deptId").value != document
+					.getElementById("listBoxdept").value)) {
+		
+			alert("Dept in header and listbox does not match.");
+			disableHeadDeptChange();
+		}
+	});
+	
+	$('#deptId textbox').bind('input propertychange', function() {
+		if (document.getElementById("listBoxdept").value != ""
+			&& (document.getElementById("deptId").value != document
+					.getElementById("listBoxdept").value)) {
+		
+			disableHeadDeptChange();
+		}
+	});
+	
+	$('input[type=radio]').click(function() {
+		if (document.getElementById("listBoxdept").value != ""
+			&& (document.getElementById("deptId").value != document
+					.getElementById("listBoxdept").value)) {
+		
+			disableHeadDeptChange();
+		}
+	});
+});
+
+function purgeListOnload() {
+	var coDept = $("#deptRadioSelection:checked").val();
+	var dept = $("#deptId").val();
+	if (coDept != 'dept') {
+		dept = 0;
+	}
+	var $newform = $('<form />', {
+		action : 'purgeListOnload.do',
+		method : 'POST',
+		command : 'purgeListCommand'
+	});
+	$newform.append($('<input />', {
+		type : 'hidden',
+		name : 'groupVO.coDept',
+		value : coDept
+	}));
+	$newform.append($('<input />', {
+		type : 'hidden',
+		name : 'groupVO.dept',
+		value : dept
+	}));
+	$newform.append($('<input />', {
+		type : 'hidden',
+		name : 'onloadFlag',
+		value : 'true'
+	}));
+	$newform.append($('<input />', {
+		type : 'hidden',
+		name : '_csrf',
+		value : $("input[name='_csrf']").val()
+	}));
+	$newform.appendTo("body");
+	$newform.submit();
+}
