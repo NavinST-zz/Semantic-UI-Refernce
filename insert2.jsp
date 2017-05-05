@@ -14,9 +14,9 @@
 	response.setContentType("text/html;charset=UTF-8");
 	out.println("Language is "+ locale + "  Text is :: "+ text);
 	Class.forName("oracle.jdbc.driver.OracleDriver");
-	String url = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=rcld03-vip1.target.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=VMMTST)))";
-	String username = "VMMMGR";
-	String password = "VMMMGR";
+	String url = "";
+	String username = "";
+	String password = "";
 	Connection conn = null;
 	OraclePreparedStatement pStmt= null ;  
 	try{
